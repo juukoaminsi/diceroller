@@ -3,150 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreshKeep. Food for All!</title>
+    <title>7 Dice Roll Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>FreshKeep. Food for All</h1>
-        <nav>
-            <ul>
-                <li><a href="#problem">Problem</a></li>
-                <li><a href="#solution">Solution</a></li>
-                <li><a href="#values">Our Values</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#progress">Progress</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="problem">
-            <h2>The Food Waste Crisis</h2>
-            <div class="area">
-                <h3>Magnitude of the Problem</h3>
-                <p>Food waste in Sub-Saharan Africa is a pressing issue, exacerbated by rapid population growth. Households contribute significantly to this problem, with 96% reporting weekly food waste. Institutions and produce markets also contribute, generating substantial amounts of waste daily.</p>
-                <p><strong>Key findings:</strong></p>
-                <ul>
-                    <li><strong>Household waste:</strong> Ugandan households generate an average of 680 tons of food waste daily.</li>
-                    <li><strong>Institutional waste:</strong> Institutions such as schools and restaurants contribute 80 tons daily.</li>
-                    <li><strong>Produce market waste:</strong> Produce markets generate 8 tons of food waste daily.</li>
-                </ul>
-            </div>
-            <div class="area">
-                <h3>Who is Affected?</h3>
-                <p>Sub-Saharan Africa faces a stark contrast between hunger and food waste. Despite a large hungry population, significant amounts of food are lost at various stages of the supply chain. Smallholder farmers, urban consumers, and vulnerable groups are disproportionately affected. Addressing this issue requires improvements in agricultural practices, food distribution, consumer education, and policy.</p>
-            </div>
-        </section>
-
-        <section id="solution">
-            <h2>A Smarter Way to Store Food</h2>
-            <div class="area">
-                <p>FreshKeep is a revolutionary device designed to help people keep their food fresh for longer. It's perfect for homes, farms, or businesses.</p>
-                <ul>
-                    <li><strong>Solar-powered:</strong> No need for electricity.</li>
-                    <li><strong>Portable:</strong> Take it anywhere.</li>
-                    <li><strong>Intelligent:</strong> Uses sensors to maintain the right temperature and humidity.</li>
-                    <li><strong>Biopolymer coating:</strong> Protects fruits and vegetables naturally.</li>
-                </ul>
-                <p>With FreshKeep, you can reduce food waste, save money, and enjoy fresher food.</p>
-            </div>
-            <div class="relevance">
-                <h3>A Win-Win for Farmers and the Planet</h3>
-                <p>FreshKeep helps everyone. Farmers keep more of their food, making more money. People have more food to eat. And we save important things like water and land. It's a win-win for everyone and helps make our world a better place.</p>
-            </div>
-            <div class="innovation">
-                <h3>Our Innovative Approach</h3>
-                <p>FreshKeep is more than just a storage device. It's a versatile tool designed to reduce food waste and improve livelihoods.</p>
-                <h4>Key Benefits</h4>
-                <ul>
-                    <li><strong>Two-in-One Functionality:</strong> Easily switch between storage and drying modes.</li>
-                    <li><strong>Portability:</strong> Move it around with ease.</li>
-                    <li><strong>Solar Power:</strong> Rely on clean, renewable energy.</li>
-                    <li><strong>Smart Technology:</strong> Monitor and control conditions with ease.</li>
-                    <li><strong>Eco-Friendly:</strong> Reduce your environmental impact.</li>
-                </ul>
-                <h4>How it Works</h4>
-                <ul>
-                    <li><strong>Storage:</strong> Keep your fresh produce at the optimal temperature and humidity.</li>
-                    <li><strong>Drying:</strong> Dehydrate fruits, vegetables, and more using the sun's energy.</li>
-                </ul>
-                <p>Experience the benefits of FreshKeep and make a positive impact on your community and the planet.</p>
-            </div>
-        </section>
-
-        <section id="values">
-            <h2>Our Values</h2>
-            <div class="values">
-                <ul>
-                    <li><strong>Innovation:</strong> FreshKeep is committed to pioneering innovative solutions that address global challenges, particularly in the area of food security.</li>
-                    <li><strong>Sustainability:</strong> We prioritize environmentally friendly practices and strive to minimize our carbon footprint.</li>
-                    <li><strong>Social Impact:</strong> FreshKeep aims to contribute to the well-being of communities by improving food access and reducing poverty.</li>
-                    <li><strong>Quality:</strong> We are dedicated to providing high-quality products and services that meet the needs of our customers.</li>
-                    <li><strong>Reliability:</strong> FreshKeep is designed to be a reliable and durable solution for food preservation.</li>
-                    <li><strong>Customer Focus:</strong> We prioritize customer satisfaction and strive to build long-lasting relationships.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="team">
-            <h2>Our Team</h2>
-            <table class="table">
+    <div class="container">
+        <h1>Welcome to the 7 Dice Roll!</h1>
+        <p>You have <span id="points">5000</span> points</p>
+        <div class="game-area">
+            <button id="rollButton">Roll Dice</button>
+            <button id="playAgainButton" style="display:none;">Play Again</button>
+            <div id="diceContainer"></div>
+            <p id="result"></p>
+        </div>
+        <div class="score-area">
+            <h2>Score Table</h2>
+            <table id="scoreTable">
                 <thead>
                     <tr>
-                        <th>Team Member</th>
-                        <th>Role</th>
-                        <th>Key Responsibilities</th>
+                        <th>Occurrences of 5's</th>
+                        <th>Frequencies</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td data-label="Team Member">Ahirirwe Leticia</td>
-                        <td data-label="Role">Agricultural Livelihoods Expert</td>
-                        <td data-label="Key Responsibilities">Guiding the project on sustainable agricultural practices</td>
+                        <td>0</td>
+                        <td>0</td>
                     </tr>
                     <tr>
-                        <td data-label="Team Member">Andrew Muwanguzi</td>
-                        <td data-label="Role">Software Engineer</td>
-                        <td data-label="Key Responsibilities">Developing and maintaining the real-time monitoring system</td>
+                        <td>1</td>
+                        <td>0</td>
                     </tr>
                     <tr>
-                        <td data-label="Team Member">Kabagenyi Oliver</td>
-                        <td data-label="Role">Project Lead</td>
-                        <td data-label="Key Responsibilities">Overseeing project implementation and coordination</td>
+                        <td>2</td>
+                        <td>0</td>
                     </tr>
                     <tr>
-                        <td data-label="Team Member">Murungi Simon</td>
-                        <td data-label="Role">Human Nutrition and Dietetics Expert</td>
-                        <td data-label="Key Responsibilities">Ensuring that preservation techniques meet dietary standards</td>
+                        <td>3</td>
+                        <td>0</td>
                     </tr>
                     <tr>
-                        <td data-label="Team Member">Okoth Raphaelina</td>
-                        <td data-label="Role">Pharmaceutical Science Specialist</td>
-                        <td data-label="Key Responsibilities">Researching and formulating the organic preservation formula</td>
+                        <td>4</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>0</td>
                     </tr>
                 </tbody>
             </table>
-        </section>
-
-        <section id="progress">
-            <h2>Our Journey</h2>
-            <div class="progress">
-                <p>FreshKeep was born out of a desire to address the pressing issue of food waste in Uganda. By combining innovative technology with a focus on sustainability, we aim to extend the shelf life of fresh produce and create a positive impact on communities.</p>
-                <h3>Key Milestones</h3>
-                <ul>
-                    <li><strong>Research and Development:</strong> We conducted extensive research to understand the root causes of food waste and develop a tailored solution.</li>
-                    <li><strong>Team Assembly:</strong> We assembled a team of experts to ensure a comprehensive approach.</li>
-                    <li><strong>Strategic Planning:</strong> We defined our goals, target markets, and business model.</li>
-                    <li><strong>Prototype Development:</strong> We're currently working on a functional prototype.</li>
-                </ul>
-                <p>While still in its early stages, FreshKeep has made significant progress. Our next steps involve securing funding and resources to scale our operations and bring FreshKeep to market.</p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 FreshKeep. All rights reserved.</p>
-    </footer>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
