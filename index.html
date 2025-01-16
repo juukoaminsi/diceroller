@@ -3,61 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7 Dice Roll Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Lucky Fives - Strategic Dice Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .points-display {
+            font-size: 1.2em;
+            color: #2c3e50;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .game-area {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .game-controls {
+            margin: 15px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1.1em;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #diceContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .dice {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dice.selected {
+            background-color: #3498db;
+            color: white;
+        }
+        .dice.rolling {
+            animation: roll 0.5s ease-in-out infinite;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+        .score-area {
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #result {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to the 7 Dice Roll!</h1>
-        <p>You have <span id="points">5000</span> points</p>
+        <div class="game-header">
+            <h1>Lucky Fives - Strategic Dice Challenge</h1>
+            <p class="instructions" id="instructions">Welcome! Click 'Roll Dice' to start playing.</p>
+        </div>
+        
+        <div class="points-display">
+            Your Points: <span id="points">5000</span>
+        </div>
+
         <div class="game-area">
-            <button id="rollButton">Roll Dice</button>
-            <button id="playAgainButton" style="display:none;">Play Again</button>
+            <div class="game-controls">
+                <button id="rollButton">Roll Dice (Cost: 25 points)</button>
+                <button id="playAgainButton" style="display:none;">New Game</button>
+            </div>
+            
             <div id="diceContainer"></div>
             <p id="result"></p>
         </div>
+
         <div class="score-area">
-            <h2>Score Table</h2>
+            <h2>Score Statistics</h2>
             <table id="scoreTable">
                 <thead>
                     <tr>
-                        <th>Occurrences of 5's</th>
-                        <th>Frequencies</th>
+                        <th>Number of Fives</th>
+                        <th>Times Rolled</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>0</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>0</td>
-                    </tr>
+                    <tr><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td></tr>
+                    <tr><td>2</td><td>0</td></tr>
+                    <tr><td>3</td><td>0</td></tr>
+                    <tr><td>4</td><td>0</td></tr>
+                    <tr><td>5</td><td>0</td></tr>
+                    <tr><td>6</td><td>0</td></tr>
+                    <tr><td>7</td><td>0</td></tr>
                 </tbody>
             </table>
         </div>
