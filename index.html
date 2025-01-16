@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Fives Deluxe</title>
+    <title>Lucky Fives - VIP Casino Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -200,152 +200,46 @@
 <body>
     <div class="container">
         <div class="game-header">
-            <h1>🎲 Lucky Fives Deluxe 🎲</h1>
-            <p class="instructions" id="instructions">
-                Cost: 100 chips per game<br>
-                1. Roll four dice (First Action)<br>
-                2. Choose up to two dice to reroll (Second Action)<br>
-                3. Select one die to multiply by 2 (Third Action)<br>
-                Win when your final sum equals 21!
-            </p>
+            <h1>🎲 Lucky Fives - VIP Casino Edition 🎲</h1>
+            <p class="instructions" id="instructions">Welcome to the VIP table! Click 'Roll Dice' to test your luck.</p>
         </div>
         
         <div class="points-display">
-            Your Balance: <span id="points">1000</span> chips
+            Your Balance: <span id="points">5000</span> chips
         </div>
 
         <div class="game-area">
             <div class="game-controls">
-                <button id="rollButton">🎲 Start Game (100 chips)</button>
-                <button id="rerollButton" style="display:none;">🎲 Reroll Selected</button>
-                <button id="multiplyButton" style="display:none;">✨ Multiply Selected</button>
+                <button id="rollButton">🎲 Roll Dice (25 chips)</button>
                 <button id="playAgainButton" style="display:none;">🔄 New Game</button>
             </div>
             
             <div id="diceContainer"></div>
             <p id="result"></p>
         </div>
+
+        <div class="score-area">
+            <h2>♠️ Score Statistics ♠️</h2>
+            <table id="scoreTable">
+                <thead>
+                    <tr>
+                        <th>Lucky Fives</th>
+                        <th>Times Rolled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td></tr>
+                    <tr><td>2</td><td>0</td></tr>
+                    <tr><td>3</td><td>0</td></tr>
+                    <tr><td>4</td><td>0</td></tr>
+                    <tr><td>5</td><td>0</td></tr>
+                    <tr><td>6</td><td>0</td></tr>
+                    <tr><td>7</td><td>0</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <script>
-let points = 1000;
-let currentDice = [];
-let selectedDice = [];
-let gamePhase = 0; // 0: not started, 1: first roll done, 2: reroll done, 3: game over
-
-function updatePoints(change) {
-    points += change;
-    document.getElementById('points').textContent = points;
-}
-
-function rollDie() {
-    return Math.floor(Math.random() * 6) + 1;
-}
-
-function calculatePrize(sum) {
-    if (sum === 21) return 500;  // 5x bet
-    if (sum === 20 || sum === 22) return 200;  // 2x bet
-    if (sum === 19 || sum === 23) return 100;  // 1x bet
-    return 0;
-}
-
-function startGame() {
-    if (points < 100) {
-        alert("Not enough chips!");
-        return;
-    }
-    
-    updatePoints(-100);
-    gamePhase = 1;
-    currentDice = Array(4).fill(0).map(() => rollDie());
-    selectedDice = [];
-    
-    document.getElementById('rollButton').style.display = 'none';
-    document.getElementById('rerollButton').style.display = 'inline-block';
-    document.getElementById('multiplyButton').style.display = 'none';
-    
-    renderDice();
-}
-
-function rerollSelected() {
-    if (selectedDice.length > 2) {
-        alert("You can only reroll up to 2 dice!");
-        return;
-    }
-    
-    selectedDice.forEach(index => {
-        currentDice[index] = rollDie();
-    });
-    
-    gamePhase = 2;
-    selectedDice = [];
-    document.getElementById('rerollButton').style.display = 'none';
-    document.getElementById('multiplyButton').style.display = 'inline-block';
-    
-    renderDice();
-}
-
-function multiplySelected() {
-    if (selectedDice.length !== 1) {
-        alert("Select exactly one die to multiply!");
-        return;
-    }
-    
-    currentDice[selectedDice[0]] *= 2;
-    gamePhase = 3;
-    
-    const sum = currentDice.reduce((a, b) => a + b, 0);
-    const prize = calculatePrize(sum);
-    updatePoints(prize);
-    
-    document.getElementById('result').textContent = 
-        `Final Sum: ${sum}. ${prize > 0 ? `You won ${prize} chips!` : 'Try again!'}`;
-    document.getElementById('multiplyButton').style.display = 'none';
-    document.getElementById('playAgainButton').style.display = 'inline-block';
-    
-    renderDice();
-}
-
-function toggleDiceSelection(index) {
-    if (gamePhase === 0 || gamePhase === 3) return;
-    
-    const diceElement = document.querySelectorAll('.dice')[index];
-    const selectedIndex = selectedDice.indexOf(index);
-    
-    if (selectedIndex === -1) {
-        selectedDice.push(index);
-        diceElement.classList.add('selected');
-    } else {
-        selectedDice.splice(selectedIndex, 1);
-        diceElement.classList.remove('selected');
-    }
-}
-
-function renderDice() {
-    const container = document.getElementById('diceContainer');
-    container.innerHTML = '';
-    
-    currentDice.forEach((value, index) => {
-        const diceElement = document.createElement('div');
-        diceElement.className = 'dice';
-        if (selectedDice.includes(index)) {
-            diceElement.classList.add('selected');
-        }
-        diceElement.textContent = value;
-        diceElement.onclick = () => toggleDiceSelection(index);
-        container.appendChild(diceElement);
-    });
-}
-
-document.getElementById('rollButton').onclick = startGame;
-document.getElementById('rerollButton').onclick = rerollSelected;
-document.getElementById('multiplyButton').onclick = multiplySelected;
-document.getElementById('playAgainButton').onclick = () => {
-    gamePhase = 0;
-    document.getElementById('result').textContent = '';
-    document.getElementById('rollButton').style.display = 'inline-block';
-    document.getElementById('playAgainButton').style.display = 'none';
-};
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
