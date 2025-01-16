@@ -313,12 +313,12 @@
             const statistics = Array(6).fill(0);
 
             const prizes = {
-                0: 0,     // 40.13% chance
-                1: 25,    // 40.13% chance
-                2: 75,    // 15.05% chance
-                3: 250,   // 3.76% chance
-                4: 1000,  // 0.47% chance
-                5: 5000   // 0.02% chance
+                0: 0,
+                1: 25,
+                2: 75,
+                3: 250,
+                4: 1000,
+                5: 5000
             };
 
             const rollButton = document.getElementById('rollButton');
@@ -347,8 +347,8 @@
             function updatePoints(newPoints) {
                 points = newPoints;
                 pointsDisplay.textContent = points;
+                rollButton.disabled = points < COST_TO_PLAY;
                 if (points < COST_TO_PLAY) {
-                    rollButton.disabled = true;
                     instructions.textContent = "Game Over! You're out of chips!";
                     playAgainButton.style.display = 'inline-block';
                 }
@@ -360,7 +360,6 @@
 
             function createDiceElements(isInitialRoll = true) {
                 if (isInitialRoll) {
-                    diceContainer.innerHTML = '';
                     currentDice = Array(NUM_DICE).fill(0).map(() => rollDie());
                     selectedDice = Array(NUM_DICE).fill(false);
                     rerollsRemaining = REROLLS_ALLOWED;
@@ -387,7 +386,7 @@
                     die.textContent = value;
                     
                     die.addEventListener('click', () => {
-                        if (rerollsRemaining > 0 && value !== 5) { // Can't reroll fives
+                        if (rerollsRemaining > 0 && value !== 5) {
                             selectedDice[index] = !selectedDice[index];
                             die.classList.toggle('selected');
                         }
@@ -396,9 +395,6 @@
                     diceContainer.appendChild(die);
                 });
                 
-               <!DOCTYPE html>
-<html lang="en">
-<!-- Previous code remains the same until the interrupted JavaScript -->
                 rerollButton.textContent = `🔄 Reroll Selected (${rerollsRemaining})`;
                 rerollButton.style.display = rerollsRemaining > 0 ? 'inline-block' : 'none';
             }
@@ -432,7 +428,6 @@
                             🎉 Congratulations! You got ${numFives} fives and won ${prize} chips! 🎉
                         </span>
                     `;
-                    resultDisplay.style.color = '#ffd700';
                 } else {
                     resultDisplay.innerHTML = `
                         <span style="color: #fff;">
@@ -445,14 +440,15 @@
             }
 
             function startNewGame() {
-                gamesPlayed++;
                 if (points >= COST_TO_PLAY) {
+                    gamesPlayed++;
                     updatePoints(points - COST_TO_PLAY);
                     createDiceElements(true);
                     rerollButton.style.display = 'inline-block';
                     rollButton.disabled = true;
                     resultDisplay.textContent = '';
                     instructions.textContent = "Select dice to reroll (fives are automatically kept)";
+                    playAgainButton.style.display = 'none';
                 }
             }
 
