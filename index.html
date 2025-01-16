@@ -439,37 +439,39 @@
                 return prize;
             }
 
-            function startNewGame() {
-                if (points >= COST_TO_PLAY) {
-                    gamesPlayed++;
-                    updatePoints(points - COST_TO_PLAY);
-                    createDiceElements(true);
-                    rerollButton.style.display = 'inline-block';
-                    rollButton.disabled = true;
-                    resultDisplay.textContent = '';
-                    instructions.textContent = "Select dice to reroll (fives are automatically kept)";
-                    playAgainButton.style.display = 'none';
-                }
-            }
+function startNewGame() {
+    if (points >= COST_TO_PLAY) {
+        gamesPlayed++;
+        updatePoints(points - COST_TO_PLAY);
+        createDiceElements(true);
+        rerollButton.style.display = 'inline-block';
+        // Remove this line that was disabling the roll button
+        // rollButton.disabled = true;
+        resultDisplay.textContent = '';
+        instructions.textContent = "You can reroll selected dice or start a new roll!";
+        playAgainButton.style.display = 'none';
+    }
+}
 
-            function handleReroll() {
-                if (rerollsRemaining > 0) {
-                    createDiceElements(false);
-                    rerollsRemaining--;
-                    updateProgress();
-                    
-                    if (rerollsRemaining === 0) {
-                        const numFives = countFives();
-                        const prize = checkWin(numFives);
-                        updateStatistics(numFives);
-                        updatePoints(points + prize);
-                        
-                        rollButton.disabled = false;
-                        rerollButton.style.display = 'none';
-                        instructions.textContent = "Roll again to try your luck!";
-                    }
-                }
-            }
+function handleReroll() {
+    if (rerollsRemaining > 0) {
+        createDiceElements(false);
+        rerollsRemaining--;
+        updateProgress();
+        
+        if (rerollsRemaining === 0) {
+            const numFives = countFives();
+            const prize = checkWin(numFives);
+            updateStatistics(numFives);
+            updatePoints(points + prize);
+            
+            // Remove disabling of roll button here too
+            // rollButton.disabled = false;
+            rerollButton.style.display = 'none';
+            instructions.textContent = "Roll again to try your luck!";
+        }
+    }
+}
 
             function resetGame() {
                 points = 5000;
