@@ -2,23 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let points = 5000;
     let selectedDice = [];
     let currentDice = [];
-    const COST_TO_PLAY = 25;
-    const NUM_DICE = 7;
-    const statistics = Array(8).fill(0); // Track occurrences of 0-7 fives
+    const COST_TO_PLAY = 100; // Adjusted for fair expected value
+    const NUM_DICE = 5;       // Reduced to 5 dice for better win rate
+    const REROLLS_ALLOWED = 2;
+    let rerollsRemaining = REROLLS_ALLOWED;
+    const statistics = Array(6).fill(0); // Track occurrences of 0-5 fives
 
-    // Prize structure - carefully balanced for ~0 expected value
+    // Revised prize structure for ~0 expected value
     const prizes = {
-        0: 0,    // No fives: 0 chips
-        1: 0,    // One five: 0 chips
-        2: 20,   // Two fives: 20 chips (small consolation)
-        3: 50,   // Three fives: 50 chips
-        4: 150,  // Four fives: 150 chips
-        5: 500,  // Five fives: 500 chips
-        6: 2000, // Six fives: 2000 chips
-        7: 5000  // Seven fives (jackpot): 5000 chips
+        0: 0,     // No fives: 0 chips
+        1: 25,    // One five: 25 chips (small consolation)
+        2: 75,    // Two fives: 75 chips
+        3: 250,   // Three fives: 250 chips
+        4: 1000,  // Four fives: 1000 chips
+        5: 5000   // Five fives (jackpot): 5000 chips
     };
 
     const rollButton = document.getElementById('rollButton');
+    const rerollButton = document.createElement('button');
+    rerollButton.id = 'rerollButton';
+    rerollButton.textContent = 'Reroll Selected (2 remaining)';
+    rerollButton.style.display = 'none';
+    rollButton.parentNode.appendChild(rerollButton);
+    
     const playAgainButton = document.getElementById('playAgainButton');
     const pointsDisplay = document.getElementById('points');
     const diceContainer = document.getElementById('diceContainer');
@@ -39,28 +45,45 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.floor(Math.random() * 6) + 1;
     }
 
-    function createDiceElements() {
-        diceContainer.innerHTML = '';
-        currentDice = Array(NUM_DICE).fill(0).map(() => rollDie());
+    function createDiceElements(isInitialRoll = true) {
+        if (isInitialRoll) {
+            diceContainer.innerHTML = '';
+            currentDice = Array(NUM_DICE).fill(0).map(() => rollDie());
+            selectedDice = Array(NUM_DICE).fill(false);
+            rerollsRemaining = REROLLS_ALLOWED;
+        } else {
+            // Only reroll selected dice
+            selectedDice.forEach((isSelected, index) => {
+                if (isSelected) {
+                    currentDice[index] = rollDie();
+                }
+            });
+        }
         
+        diceContainer.innerHTML = '';
         currentDice.forEach((value, index) => {
             const die = document.createElement('div');
-            die.className = 'dice rolling';
+            die.className = 'dice' + (selectedDice[index] ? ' selected' : '');
             die.dataset.index = index;
-            diceContainer.appendChild(die);
+            die.textContent = value;
             
-            // Animated roll effect
-            setTimeout(() => {
-                die.className = 'dice';
-                die.textContent = value;
-                
-                // Make fives special
-                if (value === 5) {
-                    die.style.color = '#ffd700';
-                    die.style.textShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
+            if (value === 5) {
+                die.style.color = '#ffd700';
+                die.style.textShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
+            }
+            
+            die.addEventListener('click', () => {
+                if (rerollsRemaining > 0) {
+                    selectedDice[index] = !selectedDice[index];
+                    die.classList.toggle('selected');
                 }
-            }, 500);
+            });
+            
+            diceContainer.appendChild(die);
         });
+        
+        rerollButton.textContent = `Reroll Selected (${rerollsRemaining} remaining)`;
+        rerollButton.style.display = rerollsRemaining > 0 ? 'inline-block' : 'none';
     }
 
     function countFives() {
@@ -76,15 +99,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = tbody.insertRow();
             row.insertCell().textContent = index;
             row.insertCell().textContent = count;
+            row.insertCell().textContent = prizes[index];
         });
     }
 
     rollButton.addEventListener('click', () => {
         if (points >= COST_TO_PLAY) {
             updatePoints(points - COST_TO_PLAY);
-            createDiceElements();
+            createDiceElements(true);
+            rerollButton.style.display = 'inline-block';
+            rollButton.disabled = true;
+            instructions.textContent = "Select dice to reroll (click dice to select)";
+        }
+    });
+
+    rerollButton.addEventListener('click', () => {
+        if (rerollsRemaining > 0) {
+            createDiceElements(false);
+            rerollsRemaining--;
             
-            setTimeout(() => {
+            if (rerollsRemaining === 0) {
                 const numFives = countFives();
                 const prize = prizes[numFives];
                 updateStatistics(numFives);
@@ -98,8 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     resultDisplay.style.color = '#fff';
                 }
                 
+                rollButton.disabled = false;
+                rerollButton.style.display = 'none';
                 instructions.textContent = "Roll again to try your luck!";
-            }, 600);
+            }
         }
     });
 
@@ -110,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultDisplay.textContent = '';
         diceContainer.innerHTML = '';
         rollButton.disabled = false;
+        rerollButton.style.display = 'none';
         playAgainButton.style.display = 'none';
         instructions.textContent = "Welcome back! Click 'Roll Dice' to test your luck.";
         updateStatistics(0);
