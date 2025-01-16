@@ -201,7 +201,7 @@
     <div class="container">
         <div class="game-header">
             <h1>🎲 Lucky Fives - VIP Casino Edition 🎲</h1>
-            <p class="instructions" id="instructions">Welcome to the VIP table! Click 'Roll Dice' to test your luck.</p>
+            <p class="instructions" id="instructions">Welcome to the VIP table! Click 'Roll Dice' to test your luck. Lock the dice you want to keep and roll again!</p>
         </div>
         
         <div class="points-display">
@@ -235,11 +235,106 @@
                     <tr><td>4</td><td>0</td></tr>
                     <tr><td>5</td><td>0</td></tr>
                     <tr><td>6</td><td>0</td></tr>
-                    <tr><td>7</td><td>0</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const pointsElement = document.getElementById('points');
+        const diceContainer = document.getElementById('diceContainer');
+        const resultElement = document.getElementById('result');
+        const rollButton = document.getElementById('rollButton');
+        const playAgainButton = document.getElementById('playAgainButton');
+        const scoreTable = document.querySelector('#scoreTable tbody');
+
+        let balance = 5000;
+        let dice = [];
+        let rollCount = 0;
+
+        const updatePoints = () => {
+            pointsElement.textContent = balance;
+        };
+
+        const createDice = () => {
+            diceContainer.innerHTML = '';
+            dice = Array(7).fill(0).map(() => ({ value: Math.ceil(Math.random() * 6), locked: false }));
+            dice.forEach((die, index) => {
+                const dieElement = document.createElement('div');
+                dieElement.className = 'dice';
+                dieElement.textContent = die.value;
+                dieElement.addEventListener('click', () => toggleLock(index));
+                if (die.locked) dieElement.classList.add('selected');
+                diceContainer.appendChild(dieElement);
+            });
+        };
+
+        const toggleLock = (index) => {
+            dice[index].locked = !dice[index].locked;
+            createDice();
+        };
+
+        const rollDice = () => {
+            if (balance < 25) {
+                resultElement.textContent = 'Not enough chips!';
+                return;
+            }
+            balance -= 25;
+            updatePoints();
+            dice.forEach((die) => {
+                if (!die.locked) {
+                    die.value = Math.ceil(Math.random() * 6);
+                }
+            });
+            createDice();
+            rollCount++;
+
+            const luckyFives = dice.filter((die) => die.value === 5).length;
+            updateScoreTable(luckyFives);
+
+            if (rollCount >= 3) {
+                endGame(luckyFives);
+            }
+        };
+
+        const updateScoreTable = (luckyFives) => {
+            const row = scoreTable.querySelector(`tr:nth-child(${luckyFives + 1}) td:nth-child(2)`);
+            row.textContent = parseInt(row.textContent) + 1;
+        };
+
+        const endGame = (luckyFives) => {
+            rollButton.disabled = true;
+            playAgainButton.style.display = 'block';
+
+            let winnings = 0;
+            switch (luckyFives) {
+                case 1: winnings = 50; break;
+                case 2: winnings = 150; break;
+                case 3: winnings = 300; break;
+                case 4: winnings = 500; break;
+                case 5: winnings = 750; break;
+                case 6: winnings = 1000; break;
+            }
+
+            balance += winnings;
+            updatePoints();
+
+            resultElement.textContent = winnings > 0
+                ? `You rolled ${luckyFives} fives and won ${winnings} chips!`
+                : 'No luck this time! Try again.';
+        };
+
+        playAgainButton.addEventListener('click', () => {
+            rollCount = 0;
+            rollButton.disabled = false;
+            playAgainButton.style.display = 'none';
+            resultElement.textContent = '';
+            createDice();
+        });
+
+        rollButton.addEventListener('click', rollDice);
+
+        createDice();
+        updatePoints();
+    </script>
 </body>
 </html>
